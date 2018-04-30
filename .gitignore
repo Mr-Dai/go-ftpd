@@ -1,0 +1,7 @@
+.idea/
+**.iml
+
+**.db
+
+go-ftpd
+go-ftpd.exe
