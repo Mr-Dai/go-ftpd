@@ -75,7 +75,7 @@ func addPermCommand(app *cli.App) {
 	// chmod
 	chmod := cli.Command{}
 	chmod.Name = "chmod"
-	chmod.Usage = "Changes file mod bits"
+	chmod.Usage = "Changes file mode bits"
 	chmod.Category = CategoryPerm
 	chmod.ArgsUsage = "mode file"
 	chmod.Action = chmodAction
