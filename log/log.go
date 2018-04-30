@@ -30,7 +30,7 @@ func NewLogger(format string, level logging.Level) (logger *logging.Logger) {
 	logger = logging.MustGetLogger(module)
 	formatter := logging.MustStringFormatter(format)
 
-	backend = logging.NewLogBackend(os.Stdout, "", 0)
+	backend = logging.NewLogBackend(os.Stderr, "", 0)
 	backFormatter := logging.NewBackendFormatter(backend, formatter)
 	leveledBackend = logging.AddModuleLevel(backFormatter)
 	leveledBackend.SetLevel(level, module)

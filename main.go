@@ -3,9 +3,9 @@ package main
 import (
 	"os"
 
+	"github.com/Mr-Dai/go-ftpd/log"
 	"github.com/goftp/file-driver"
 	"github.com/goftp/server"
-	"github.com/Mr-Dai/go-ftpd/log"
 	"gopkg.in/urfave/cli.v1"
 )
 
@@ -29,11 +29,12 @@ func serverAction(c *cli.Context) {
 	}
 
 	opt := &server.ServerOpts{
-		Name:    c.String("name"),
-		Factory: factory,
-		Port:    c.Int("port"),
-		Auth:    auth,
-		Logger:  log.FtpdLogger(),
+		Name:         c.String("name"),
+		Factory:      factory,
+		Port:         c.Int("port"),
+		Auth:         auth,
+		Logger:       log.FtpdLogger(),
+		PassivePorts: c.String("passive-ports"),
 	}
 
 	// Start FTP server
@@ -49,11 +50,12 @@ func addRunCommand(app *cli.App) {
 	runCommand.Name = "run"
 	runCommand.Aliases = []string{"s"}
 	runCommand.Usage = "Runs FTP server"
-	runCommand.Flags = []cli.Flag {
+	runCommand.Flags = []cli.Flag{
 		cli.StringFlag{Name: "name, n", Value: "my-ftp", Usage: "name of the FTP server"},
 		cli.StringFlag{Name: "datapath, d", Value: "/tmp/go-ftpd/data",
 			Usage: "data directory for the FTP server"},
 		cli.IntFlag{Name: "port, p", Value: 21, Usage: "port to listen to"},
+		cli.StringFlag{Name: "passive-ports", Value: "30000-31000", Usage: "range for passive ports"},
 	}
 	runCommand.Action = serverAction
 
@@ -69,7 +71,7 @@ func prepareCLI() (app *cli.App) {
 	app.Email = "robert.peng@foxmail.com"
 
 	// Setup common flags
-	app.Flags = []cli.Flag {
+	app.Flags = []cli.Flag{
 		cli.StringFlag{Name: "authdb, a", Value: "/tmp/go-ftpd/auth.db",
 			Usage: "path for auth DB of the FTP server"},
 	}

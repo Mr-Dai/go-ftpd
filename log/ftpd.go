@@ -15,13 +15,13 @@ func (l *ftpdLogger) Print(sessionId string, message interface{}) {
 }
 
 func (l *ftpdLogger) Printf(sessionId string, format string, v ...interface{}) {
-	realV := make([]interface{}, len(v) + 1)
+	realV := make([]interface{}, len(v)+1)
 	realV[0] = sessionId
 	for i, value := range v {
-		realV[i + 1] = value
+		realV[i+1] = value
 	}
 
-	l.logger.Infof("%s " + format, realV...)
+	l.logger.Infof("%s "+format, realV...)
 }
 
 func (l *ftpdLogger) PrintCommand(sessionId string, command string, params string) {

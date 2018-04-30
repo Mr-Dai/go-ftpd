@@ -1,11 +1,12 @@
 package main
 
 import (
-	"gopkg.in/urfave/cli.v1"
-	"strings"
-	"github.com/Mr-Dai/go-ftpd/log"
-	"strconv"
 	"os"
+	"strconv"
+	"strings"
+
+	"github.com/Mr-Dai/go-ftpd/log"
+	"gopkg.in/urfave/cli.v1"
 )
 
 const CategoryPerm = "Permission Management"

@@ -42,7 +42,9 @@ GLOBAL OPTIONS:
    --version, -v             print the version
 ```
 
-You can manage user/group and file permissions through other subcommands:
+You can manage user/group and file permissions through other subcommands.
+
+**NOTE** that LevelDB does not allow concurrent access from different processes, so you will not be able to use the following commands if your server is running.
 
 ```
 $ go-ftpd user help
@@ -95,9 +97,21 @@ USAGE:
 
 ## Docker
 
+```
+docker run -d -p 21:21 -p 30000-30100:30000-30100 -v auth.db:/ftpd/auth.db -v data:/ftpd/data geekdai/go-ftpd
+```
+
+Some FTP clients require a large number of ports for Passive mode data transferring
+if you are uploading/downloading a folder recursively. Docker could hang on container start/stop for a while
+if you try to bind a large range of ports. Instead, you can specify the container to use the same network
+namespace as the host:
+
+```
+docker run -d --network=host -v auth.db:/ftpd/auth.db -v data:/ftpd/data geekdai/go-ftpd
+```
+
 ## TODO
 
 - [ ] Support for configuration file.
 - [ ] Support for environment variables.
-
-
+- [ ] Server with User/Group/Permission Management through gRPC.

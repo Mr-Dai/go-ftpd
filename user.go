@@ -1,15 +1,16 @@
 package main
 
 import (
-	"gopkg.in/urfave/cli.v1"
+	"fmt"
+	"os"
+	"strings"
+
+	"github.com/Mr-Dai/go-ftpd/log"
+	"github.com/goftp/ftpd/web"
 	"github.com/goftp/leveldb-auth"
 	"github.com/goftp/leveldb-perm"
-	"os"
 	"github.com/syndtr/goleveldb/leveldb"
-	"github.com/Mr-Dai/go-ftpd/log"
-	"fmt"
-	"github.com/goftp/ftpd/web"
-	"strings"
+	"gopkg.in/urfave/cli.v1"
 )
 
 const CategoryUser = "User/Group Management"

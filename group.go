@@ -1,10 +1,11 @@
 package main
 
 import (
-	"gopkg.in/urfave/cli.v1"
-	"github.com/Mr-Dai/go-ftpd/log"
 	"fmt"
 	"strings"
+
+	"github.com/Mr-Dai/go-ftpd/log"
+	"gopkg.in/urfave/cli.v1"
 )
 
 func listGroupAction(c *cli.Context) {
