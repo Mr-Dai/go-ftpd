@@ -5,9 +5,6 @@ import (
 
 	"github.com/goftp/file-driver"
 	"github.com/goftp/server"
-	"github.com/syndtr/goleveldb/leveldb"
-	"github.com/goftp/leveldb-perm"
-	"github.com/goftp/leveldb-auth"
 	"github.com/Mr-Dai/go-ftpd/log"
 	"gopkg.in/urfave/cli.v1"
 )
@@ -16,18 +13,11 @@ const version = "0.1.0"
 
 func serverAction(c *cli.Context) {
 	// Setup auth DB
-	authdb := c.GlobalString("authdb")
-	db, err := leveldb.OpenFile(authdb, nil)
-	if err != nil {
-		log.Fatalf("Failed to setup auth DB on `%s`: %v", authdb, err)
-	}
-
-	auth := &ldbauth.LDBAuth{db}
-	perm := ldbperm.NewLDBPerm(db, "root", "root", os.ModePerm)
+	auth, perm := prepareAuth(c)
 
 	// Setup data directory
 	datapath := c.String("datapath")
-	_, err = os.Lstat(datapath)
+	_, err := os.Lstat(datapath)
 	if os.IsNotExist(err) {
 		os.MkdirAll(datapath, os.ModePerm)
 	} else if err != nil {
@@ -54,20 +44,20 @@ func serverAction(c *cli.Context) {
 	}
 }
 
-func addServerCommand(app *cli.App) {
-	serverCommand := cli.Command{}
-	serverCommand.Name = "server"
-	serverCommand.Aliases = []string{"s"}
-	serverCommand.Usage = "Run FTP server"
-	serverCommand.Flags = []cli.Flag {
+func addRunCommand(app *cli.App) {
+	runCommand := cli.Command{}
+	runCommand.Name = "run"
+	runCommand.Aliases = []string{"s"}
+	runCommand.Usage = "Runs FTP server"
+	runCommand.Flags = []cli.Flag {
 		cli.StringFlag{Name: "name, n", Value: "my-ftp", Usage: "name of the FTP server"},
 		cli.StringFlag{Name: "datapath, d", Value: "/tmp/go-ftpd/data",
 			Usage: "data directory for the FTP server"},
 		cli.IntFlag{Name: "port, p", Value: 21, Usage: "port to listen to"},
 	}
-	serverCommand.Action = serverAction
+	runCommand.Action = serverAction
 
-	app.Commands = append(app.Commands, serverCommand)
+	app.Commands = append(app.Commands, runCommand)
 }
 
 func prepareCLI() (app *cli.App) {
@@ -78,14 +68,17 @@ func prepareCLI() (app *cli.App) {
 	app.Author = "Robert Peng"
 	app.Email = "robert.peng@foxmail.com"
 
-	// Setup common flag
+	// Setup common flags
 	app.Flags = []cli.Flag {
 		cli.StringFlag{Name: "authdb, a", Value: "/tmp/go-ftpd/auth.db",
 			Usage: "path for auth DB of the FTP server"},
 	}
 
-	// Setup `server` command
-	addServerCommand(app)
+	// Setup commands
+	addRunCommand(app)
+	addUserCommand(app)
+	addGroupCommand(app)
+	addPermCommand(app)
 	return
 }
 
