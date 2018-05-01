@@ -13,7 +13,6 @@ RUN go install -v github.com/Mr-Dai/go-ftpd
 VOLUME /ftpd/auth.db
 VOLUME /ftpd/data
 
-EXPOSE 20 21
-EXPOSE 30000-30100
+EXPOSE 21
 
-CMD ["go-ftpd", "-a", "/ftpd/auth.db", "run", "-d", "/ftpd/data", "--passive-ports", "30000-30100"]
+CMD ["go-ftpd", "-a", "/ftpd/auth.db", "run", "-d", "/ftpd/data"]
